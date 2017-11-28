@@ -15,7 +15,9 @@ void SequentielCommun(int iteration)
 
   // Variable Chebyshev
   double Chebyshev = 0.0;
-  double *U ,*V;
+  double *U = new double [iteration];
+  double *V = new double [iteration];
+
   double U1 = (99.0 / 100.0);
   double V1 = (99.0 / 4780.0);
 
@@ -33,8 +35,9 @@ void SequentielCommun(int iteration)
   auto clockBegin2 = std::chrono::system_clock::now();
   Chebyshev += 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * U1) - V1);
 
-  U = SuiteU(iteration);
-  V = SuiteV(iteration);
+  SuiteU(0,iteration,U);
+  SuiteV(0,iteration,V);
+
   Chebyshev += ChebyshevF(2,iteration,U,V);
 
   delete [] U;

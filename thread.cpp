@@ -143,7 +143,7 @@ void *SuiteUChebyshev(void *arg)
 {
   SChebySuite *U = (SChebySuite *) arg;
 
-  U->suite=SuiteU(U->iteration);
+  SuiteU(0,U->iteration,*U->suite);
 
   return 0;
 }
@@ -152,7 +152,7 @@ void *SuiteVChebyshev(void *arg)
 {
   SChebySuite *V = (SChebySuite *) arg;
 
-  V->suite=SuiteV(V->iteration);
+  SuiteV(0,V->iteration,*V->suite);
 
   return 0;
 }

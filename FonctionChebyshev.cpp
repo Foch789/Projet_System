@@ -1,14 +1,13 @@
 #include "hpp/Analytique.hpp"
 
-double *SuiteU(int iteration)
+void SuiteU(int iterationD,int iterationF,double *tab)
 {
 
-  double *suite = new double [iteration];
 
   int p=1;
   double U = 0.0, U1 = (99.0 / 100.0), U2 = (4801.0 / 5000.0);
 
-  for(int i = 0; i < iteration;++i)
+  for(int i = iterationD; i < iterationF;++i)
   {
     while (p < 2) {
 
@@ -19,23 +18,19 @@ double *SuiteU(int iteration)
       p++;
     }
     p=0;
-    suite[i] = U;
+    tab[i] = U;
   }
 
-
-  return suite;
 }
 
 
-double *SuiteV(int iteration)
+void SuiteV(int iterationD,int iterationF,double *tab)
 {
-
-  double *suite = new double [iteration];
 
   int p=1;
   double V = 0.0, V1 = (99.0 / 4780.0), V2 = -(11414399.0 / 11424200.0);
 
-  for(int i = 0; i < iteration;++i)
+  for(int i = iterationD; i < iterationF;++i)
   {
     while (p < 2) {
 
@@ -46,10 +41,9 @@ double *SuiteV(int iteration)
       p++;
     }
     p=0;
-    suite[i]=V;
+    tab[i]=V;
   }
 
-  return suite;
 }
 
 
