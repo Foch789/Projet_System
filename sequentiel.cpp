@@ -8,7 +8,7 @@ void SequentielCommun()
 
   // Variable programme
   int iteration = 0;
-  clock_t tS,tP;
+  float tS,tP;
   float tT;
 
   // Variable Plouffe
@@ -26,38 +26,39 @@ void SequentielCommun()
 
   // CAlCUL DE PLOUFFE
   cout << "Debut du calcul de Plouffe..." << endl;
-  tP= clock();
+  auto clockBegin = std::chrono::system_clock::now();
   Plouffe = PlouffeF(0,iteration);
-  tP = clock() - tP;
+  tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
   cout << "Plouffe = " << Plouffe << endl;
-  cout << "Le calcul c'est fait en " << ((float)tP/CLOCKS_PER_SEC) << " secondes." << endl;
+  cout << "Le calcul c'est fait en " << tP << " secondes." << endl;
 
   // CAlCUL DE CHEBYSHEV
 
   cout << "Debut du calcul de Chebyshev..." << endl;
-  tS = clock();
+  auto clockBegin2 = std::chrono::system_clock::now();
   Chebyshev += 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * U1) - V1);
 
   U = SuiteU(iteration);
   V = SuiteV(iteration);
   Chebyshev += ChebyshevF(2,iteration,U,V);
+  
   delete [] U;
   delete [] V;
 
-  tS= clock() - tS;
+  tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin2).count()/1000000000.0;
   cout << "Chebyshev = " << Chebyshev << endl;
-  cout << "Le calcul c'est fait en " << ((float)tS/CLOCKS_PER_SEC) << " secondes." << endl;
+  cout << "Le calcul c'est fait en " << tS << " secondes." << endl;
 
-  tT = ((float)tS/CLOCKS_PER_SEC) + ((float)tP/CLOCKS_PER_SEC);
+  tT =  tS + tP;
   cout << "Temps total du programme :" << tT << " secondes." << endl;
 
-  if(((float)tS/CLOCKS_PER_SEC) > ((float)tP/CLOCKS_PER_SEC))
+  if(tS > tP)
   {
-    cout << "Plouffe est plus rapide de " << (((float)tS/CLOCKS_PER_SEC) - ((float)tP/CLOCKS_PER_SEC)) << " secondes." << endl;
+    cout << "Plouffe est plus rapide de " << tS - tP << " secondes." << endl;
   }
   else
   {
-    cout << "Chebyshev est plus rapide de " << (((float)tP/CLOCKS_PER_SEC) - ((float)tS/CLOCKS_PER_SEC)) << " secondes." << endl;
+    cout << "Chebyshev est plus rapide de " << tP - tS << " secondes." << endl;
   }
 
 }

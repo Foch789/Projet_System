@@ -1,32 +1,43 @@
 #include "hpp/Analytique.hpp"
-#include <chrono>
 
-//void Plouffe(int iteration);
-void *Chebyshev(void *arg);
+//===========================================================================
+//===========================================================================
+//===========================================================================
+
+void *FChebyshev(void *arg);
 void *SuiteUChebyshev(void *arg);
 void *SuiteVChebyshev(void *arg);
 void *FormuleChebyshev(void *arg);
 
-struct Scheby
-{
-  int iteration = 0;
-  double tS;
-}typedef Scheby;
+//===========================================================================
+//============================Structure Chebyshev============================
+//===========================================================================
 
-struct SchebyS
+struct SCheby
 {
-    int iteration = 0;
+  int iteration;
+  float tS;
+  double resultat;
+}typedef SCheby;
+
+struct SChebySuite
+{
+    int iteration;
     double *suite;
-}typedef SchebyS; //Simplifiage
+}typedef SChebySuite;
 
-struct SchebyF
+struct SChebyFormule
 {
-  int iterationD = 0;
-  int iterationF = 0;
-  double resultat = 0;
+  int iterationD;
+  int iterationF;
+  double resultat;
   double *U;
   double *V;
-}typedef SchebyF;
+}typedef SChebyFormule;
+
+//===========================================================================
+//===========================================================================
+//===========================================================================
 
 void ThreadCommun()
 {
@@ -37,44 +48,47 @@ void ThreadCommun()
   int iteration = 0;
   float tT;
   pthread_t TChebyshev;
-  Scheby lel;
-
+  SCheby Chebyshev;
 
   cout << "Combien d'iterations voulez-vous ? > ";
   cin >> iteration;
 
-  lel.iteration = iteration;
+  Chebyshev.iteration = iteration;
 
-  pthread_create(&TChebyshev,NULL,Chebyshev,static_cast<void*>(&lel));
+  pthread_create(&TChebyshev,NULL,FChebyshev,static_cast<void*>(&Chebyshev));
 
   pthread_join(TChebyshev,NULL);
 
-  // tT = ((float)lel.tS/CLOCKS_PER_SEC);
-  tT = lel.tS;
+  cout << "Chebyshev = " << Chebyshev.resultat << endl;
+  cout << "Le calcul c'est fait en " << Chebyshev.tS << " secondes." << endl;
+
+  tT = Chebyshev.tS;
   cout << "Temps total du programme :" << tT << " secondes." << endl;
 
 }
 
-void *Chebyshev(void *arg)
+//===========================================================================
+//===========================================================================
+//===========================================================================
+
+
+void *FChebyshev(void *arg)
 {
 
-  Scheby *mp = (struct Scheby *) arg;
-  double resultat = 0.0;
+  SCheby *Chebyshev = (struct SCheby *) arg;
 
-  SchebyS U;
-  SchebyS V;
+  SChebySuite U;
+  SChebySuite V;
 
-  U.iteration = mp->iteration;
-//  U.suite = new double [mp->iteration];
+  U.iteration = Chebyshev->iteration;
 
-  V.iteration = mp->iteration;
-  //V.suite = new double [mp->iteration];
+  V.iteration = Chebyshev->iteration;
 
   pthread_t TU,TV;
 
-  auto clockBegin = std::chrono::system_clock::now();;
+  auto clockBegin = std::chrono::system_clock::now();
 
-  resultat += 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * (99.0 / 100.0)) - (99.0 / 4780.0));
+  Chebyshev->resultat = 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * (99.0 / 100.0)) - (99.0 / 4780.0));
 
   pthread_create(&TU,NULL,SuiteUChebyshev,static_cast<void*>(&U));
   pthread_create(&TV,NULL,SuiteVChebyshev,static_cast<void*>(&V));
@@ -82,36 +96,39 @@ void *Chebyshev(void *arg)
   pthread_join(TU,NULL);
   pthread_join(TV,NULL);
 
-  if(mp->iteration == 2)
+  if(Chebyshev->iteration == 2)
   {
 
     pthread_t TF1;
 
-    SchebyF C1;
+    SChebyFormule C1;
     C1.iterationD = 2;
     C1.iterationF = 2;
+    C1.resultat = 0;
     C1.U = U.suite;
     C1.V = V.suite;
 
     pthread_create(&TF1,NULL,FormuleChebyshev,static_cast<void*>(&C1));
     pthread_join(TF1,NULL);
 
-    resultat += C1.resultat;
+    Chebyshev->resultat += C1.resultat;
 
   }
-  else if (mp->iteration >=3)
+  else if (Chebyshev->iteration >=3)
   {
     pthread_t TF1,TF2;
 
-    SchebyF C1;
+    SChebyFormule C1;
     C1.iterationD = 2;
-    C1.iterationF = (int)(mp->iteration)/2;
+    C1.iterationF = (int)(Chebyshev->iteration)/2;
+    C1.resultat = 0;
     C1.U = U.suite;
     C1.V = V.suite;
 
-    SchebyF C2;
-    C2.iterationD = ((int)(mp->iteration)/2)+1;
-    C2.iterationF = mp->iteration;
+    SChebyFormule C2;
+    C2.iterationD = ((int)(Chebyshev->iteration)/2)+1;
+    C2.iterationF = Chebyshev->iteration;
+    C2.resultat = 0;
     C2.U = U.suite;
     C2.V = V.suite;
 
@@ -120,14 +137,11 @@ void *Chebyshev(void *arg)
     pthread_join(TF1,NULL);
     pthread_join(TF2,NULL);
 
-    resultat += C1.resultat + C2.resultat;
+    Chebyshev->resultat += C1.resultat + C2.resultat;
 
   }
 
-  mp->tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
-
-  cout << "Chebyshev = " << resultat << endl;
-  cout << "Le calcul c'est fait en " << mp->tS << " secondes." << endl;
+  Chebyshev->tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
 
   delete [] U.suite;
   delete [] V.suite;
@@ -138,18 +152,18 @@ void *Chebyshev(void *arg)
 
 void *SuiteUChebyshev(void *arg)
 {
-  SchebyS *A = (SchebyS *) arg;
+  SChebySuite *U = (SChebySuite *) arg;
 
-  A->suite=SuiteU(A->iteration);
+  U->suite=SuiteU(U->iteration);
 
   return 0;
 }
 
 void *SuiteVChebyshev(void *arg)
 {
-  SchebyS *A = (SchebyS *) arg;
+  SChebySuite *V = (SChebySuite *) arg;
 
-  A->suite=SuiteV(A->iteration);
+  V->suite=SuiteV(V->iteration);
 
   return 0;
 }
@@ -157,9 +171,9 @@ void *SuiteVChebyshev(void *arg)
 void *FormuleChebyshev(void *arg)
 {
 
-  SchebyF *A = (SchebyF *) arg;
+  SChebyFormule *C = (SChebyFormule *) arg;
 
-  A->resultat = ChebyshevF(A->iterationD,A->iterationF,A->U,A->V);
+  C->resultat = ChebyshevF(C->iterationD,C->iterationF,C->U,C->V);
 
   return 0;
 }

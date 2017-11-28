@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
-#include <ctime>
 #include <pthread.h>
+#include <chrono>
 
 
 using namespace std;

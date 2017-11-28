@@ -3,8 +3,11 @@ all: main.exe clean
 clean: *.o
 	rm *.o
 
-main.exe: main.o sequentiel.o thread.o FonctionChebyshev.o FonctionPlouffe.o
-	g++ -Wall -o main.exe main.o FonctionChebyshev.o FonctionPlouffe.o sequentiel.o thread.o -lpthread -lm
+main.exe: main.o sequentiel.o thread.o FonctionChebyshev.o FonctionPlouffe.o OpenMP.o
+	g++ -Wall -o main.exe main.o FonctionChebyshev.o FonctionPlouffe.o sequentiel.o thread.o OpenMP.o -lpthread -lm
+
+OpenMP.o: OpenMP.cpp
+	g++ -Wall -c -std=c++11 OpenMP.cpp
 
 thread.o: thread.cpp
 	g++ -Wall -c -std=c++11 thread.cpp
