@@ -1,13 +1,12 @@
 #include "hpp/Analytique.hpp"
 
-void SequentielCommun()
+void SequentielCommun(int iteration)
 {
   cout << "==============================================================="<< endl;
   cout << "==========================Sequentiel==========================="<< endl;
   cout << "==============================================================="<< endl;
 
   // Variable programme
-  int iteration = 0;
   float tS,tP;
   float tT;
 
@@ -19,10 +18,6 @@ void SequentielCommun()
   double *U ,*V;
   double U1 = (99.0 / 100.0);
   double V1 = (99.0 / 4780.0);
-
-
-  cout << "Combien d'iterations voulez-vous ? > ";
-  cin >> iteration;
 
   // CAlCUL DE PLOUFFE
   cout << "Debut du calcul de Plouffe..." << endl;
@@ -41,7 +36,7 @@ void SequentielCommun()
   U = SuiteU(iteration);
   V = SuiteV(iteration);
   Chebyshev += ChebyshevF(2,iteration,U,V);
-  
+
   delete [] U;
   delete [] V;
 

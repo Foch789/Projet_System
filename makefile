@@ -4,7 +4,7 @@ clean: *.o
 	rm *.o
 
 main.exe: main.o sequentiel.o thread.o FonctionChebyshev.o FonctionPlouffe.o OpenMP.o
-	g++ -Wall -o main.exe main.o FonctionChebyshev.o FonctionPlouffe.o sequentiel.o thread.o OpenMP.o -lpthread -lm
+	g++ -Wall -lpthread -lm -fopenmp -o main.exe main.o FonctionChebyshev.o FonctionPlouffe.o sequentiel.o thread.o OpenMP.o
 
 OpenMP.o: OpenMP.cpp
 	g++ -Wall -c -std=c++11 OpenMP.cpp

@@ -3,15 +3,13 @@
 #include <limits>
 #include <pthread.h>
 #include <chrono>
-
+#include <omp.h>
 
 using namespace std;
 
-//void FormulePLouffe();
-//void FormuleChebyshev();
-
-void SequentielCommun();
-void ThreadCommun();
+void SequentielCommun(int iteration);
+void ThreadCommun(int iteration);
+void OpenMP_Commun(int iteration);
 
 double *SuiteU(int iteration);
 double *SuiteV(int iteration);
