@@ -4,15 +4,27 @@
 #include <pthread.h>
 #include <chrono>
 #include <omp.h>
+#include <memory>
 
 using namespace std;
 
-void SequentielCommun(int iteration);
-void ThreadCommun(int iteration);
-void OpenMP_Commun(int iteration);
 
-void SuiteU(int iterationD,int iterationF,double &tab);
-void SuiteV(int iterationD,int iterationF,double &tab);
+struct result
+{
+double plouffe;
+float Tp;
+double chebyshev;
+float Tc;
+
+result& operator=(const result& src) { plouffe = src.plouffe; Tp = src.Tp; chebyshev = src.chebyshev; Tc = src.Tc; return *this;}
+};
+
+result SequentielCommun(int iteration);
+result ThreadCommun(int iteration);
+result OpenMP_Commun(int iteration);
+
+double *SuiteU(int iteration);
+double *SuiteV(int iteration);
 double ChebyshevF(int iterationD,int iterationF,double *tabU,double *tabV);
 
 double PlouffeF(int iterationD,int iterationF);

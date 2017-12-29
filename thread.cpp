@@ -1,5 +1,9 @@
 #include "hpp/Analytique.hpp"
 
+
+
+
+
 //===========================================================================
 //============================Structure Chebyshev============================
 //===========================================================================
@@ -39,8 +43,9 @@ void *FormuleChebyshev(void *arg);
 //===========================================================================
 //===========================================================================
 
-void ThreadCommun(int iteration)
+result ThreadCommun(int iteration)
 {
+  result thread;
   cout << "==============================================================="<< endl;
   cout << "==========================LES THREADS=========================="<< endl;
   cout << "==============================================================="<< endl;
@@ -56,6 +61,11 @@ void ThreadCommun(int iteration)
 
   tT = tS;
   cout << "Temps total du programme :" << tT << " secondes." << endl;
+
+  thread.chebyshev = Cresultat;
+  thread.Tc = tS;
+
+  return thread;
 
 }
 
@@ -143,7 +153,7 @@ void *SuiteUChebyshev(void *arg)
 {
   SChebySuite *U = (SChebySuite *) arg;
 
-  SuiteU(0,U->iteration,*U->suite);
+  U->suite=SuiteU(U->iteration);
 
   return 0;
 }
@@ -152,7 +162,7 @@ void *SuiteVChebyshev(void *arg)
 {
   SChebySuite *V = (SChebySuite *) arg;
 
-  SuiteV(0,V->iteration,*V->suite);
+  V->suite=SuiteV(V->iteration);
 
   return 0;
 }
