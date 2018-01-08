@@ -123,12 +123,11 @@ void FSimonPlouffe(int iteration, float &tP, double &resultat){
   pthread_join(Tp2,NULL);
 
 
-  resultatPlouffe = p1.resultat + p2.resultat;
-  resultat = resultatPlouffe;
+  resultat = p1.resultat + p2.resultat;
   tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
 
 
-  return 0;
+
 
 }
 
