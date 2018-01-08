@@ -2,6 +2,24 @@
 
 
 
+//===========================================================================
+//============================Structure Plouffe==============================
+//===========================================================================
+
+struct PLouffe
+{
+    int iteration = 0;
+    double tP;
+    double resultatFinal = 0.0;
+} typedef PLouffe;
+
+struct PlouffeThreads
+{
+    int debutIteration = 0;
+    int finalIteration = 0;
+    double resultat = 0;
+
+} typedef PlouffeThreads;
 
 
 //===========================================================================
@@ -35,6 +53,8 @@ struct SChebyFormule
 //===========================================================================
 
 void FChebyshev(int iteration,float &tS,double &resultat);
+void FSimonPlouffe(int iteration float &tP, double &resultat);
+void *FormulePlouffe(void *arg);
 void *SuiteUChebyshev(void *arg);
 void *SuiteVChebyshev(void *arg);
 void *FormuleChebyshev(void *arg);
@@ -51,19 +71,24 @@ result ThreadCommun(int iteration)
   cout << "==============================================================="<< endl;
 
   double Cresultat=0;
-  float tT,tS;
+  float tT,tS,tP;
 
 
   FChebyshev(iteration,tS,Cresultat);
-
+  FPlouffe(iteration,tP,Presultat);
   cout << "Chebyshev = " << Cresultat << endl;
-  cout << "Le calcul c'est fait en " << tS << " secondes." << endl;
+  cout << "Le calcul de Chebyshev c'est fait en " << tS << " secondes." << endl;
+  cout << "Simon Plouffe = " <<Presultat << endl;
+  cout << "Le calcul Simon Plouffe c'est fait en " << tP << " secondes." << endl;
 
-  tT = tS;
+
+  tT = tS + tP;
   cout << "Temps total du programme :" << tT << " secondes." << endl;
 
+  thread.plouffe = Presultat;
   thread.chebyshev = Cresultat;
   thread.Tc = tS;
+  thread.Ts = tP;
 
   return thread;
 
@@ -72,6 +97,36 @@ result ThreadCommun(int iteration)
 //===========================================================================
 //===========================================================================
 //===========================================================================
+
+
+void FSimonPlouffe(int iteration, float &tS, double &resultat){
+
+  PlouffeThreads p1,p2;
+
+  pthread_t Tp1,Tp2;
+
+   auto clockBegin = std::chrono::system_clock::now();;
+
+  p1.debutIteration = 0;
+  p1.finalIteration = mpp->iteration/2 ;
+  p2.debutIteration = p1.finalIteration;
+  p2.finalIteration = mpp->iteration;
+
+  pthread_create(&Tp1,NULL,FormulePlouffe,static_cast<void*>(&p1));
+  pthread_create(&Tp2,NULL,FormulePlouffe,static_cast<void*>(&p2));
+
+  pthread_join(Tp1,NULL);
+  pthread_join(Tp2,NULL);
+
+
+  resultatPlouffe = p1.resultat + p2.resultat;
+  mpp -> resultatFinal = resultatPlouffe;
+  mpp->tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
+
+
+  return 0;
+
+}
 
 
 void FChebyshev(int iteration,float &tS,double &resultat)
