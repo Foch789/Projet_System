@@ -110,12 +110,11 @@ void FSimonPlouffe(int iteration, float &tP, double &resultat){
 
 
   p1.debutIteration = 0;
-  p1.finalIteration = iteration/2 ;
-  p2.debutIteration = p1.finalIteration;
+  p1.finalIteration = static_cast<int>(iteration/2);
+  p2.debutIteration = p1.finalIteration+1;
   p2.finalIteration = iteration;
 
   auto clockBegin = std::chrono::system_clock::now();
-
   pthread_create(&Tp1,NULL,FormulePlouffe,static_cast<void*>(&p1));
   pthread_create(&Tp2,NULL,FormulePlouffe,static_cast<void*>(&p2));
 
