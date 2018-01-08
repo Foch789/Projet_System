@@ -48,6 +48,7 @@ int main()
     valeurP = valeurP - 3.0;
     valeurC = valeurC - 3.0;
 
+
     valeurP*=pow(10,tailleP);
     valeurC*=pow(10,tailleC);
 
