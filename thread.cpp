@@ -74,14 +74,14 @@ result ThreadCommun(int iteration)
   double Presultat=0;
   float tT,tS,tP;
 
-
-  FChebyshev(iteration,tS,Cresultat);
   FSimonPlouffe(iteration,tP,Presultat);
-
-  cout << "Chebyshev = " << Cresultat << endl;
-  cout << "Le calcul de Chebyshev c'est fait en " << tS << " secondes." << endl;
   cout << "Simon Plouffe = " <<Presultat << endl;
   cout << "Le calcul Simon Plouffe c'est fait en " << tP << " secondes." << endl;
+
+  FChebyshev(iteration,tS,Cresultat);
+  cout << "Chebyshev = " << Cresultat << endl;
+  cout << "Le calcul de Chebyshev c'est fait en " << tS << " secondes." << endl;
+
 
 
   tT = tS + tP;
