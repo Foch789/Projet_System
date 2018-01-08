@@ -10,7 +10,7 @@ struct PLouffe
 {
     int iteration = 0;
     double tP;
-    double resultatFinal = 0.0;
+    double resultat = 0.0;
 } typedef PLouffe;
 
 struct PlouffeThreads
@@ -101,7 +101,7 @@ result ThreadCommun(int iteration)
 //===========================================================================
 
 
-void FSimonPlouffe(int iteration, float &tS, double &resultat){
+void FSimonPlouffe(int iteration, float &tP, double &resultat){
 
   PlouffeThreads p1,p2;
 
@@ -124,8 +124,8 @@ void FSimonPlouffe(int iteration, float &tS, double &resultat){
 
 
   resultatPlouffe = p1.resultat + p2.resultat;
-  mpp -> resultatFinal = resultatPlouffe;
-  mpp->tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
+  resultat = resultatPlouffe;
+  tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
 
 
   return 0;
