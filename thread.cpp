@@ -110,9 +110,9 @@ void FSimonPlouffe(int iteration, float &tS, double &resultat){
 
 
   p1.debutIteration = 0;
-  p1.finalIteration = mpp->iteration/2 ;
+  p1.finalIteration = iteration/2 ;
   p2.debutIteration = p1.finalIteration;
-  p2.finalIteration = mpp->iteration;
+  p2.finalIteration = iteration;
 
   auto clockBegin = std::chrono::system_clock::now();
 
@@ -130,6 +130,16 @@ void FSimonPlouffe(int iteration, float &tS, double &resultat){
 
   return 0;
 
+}
+
+void *FormulePlouffe(void *arg)
+{
+
+  PlouffeThreads *fctPlouffe = (PlouffeThreads*) arg;
+
+  fctPlouffe->resultat = PlouffeF(fctPlouffe->debutIteration,fctPlouffe->finalIteration);
+
+  return 0;
 }
 
 
