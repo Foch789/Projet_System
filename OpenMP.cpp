@@ -1,6 +1,8 @@
 #include "hpp/Analytique.hpp"
 
 void OpenMP_Chebyshev(int iteration, result &R);
+void OpenMP_Plouffe(int iteration, result &R);
+
 
 result OpenMP_Commun(int iteration)
 {
@@ -10,10 +12,37 @@ result OpenMP_Commun(int iteration)
   cout << "==============================================================="<< endl;
 
   OpenMP_Chebyshev(iteration,openMP);
+  OpenMP_PLouffe(iteration,openMP);
 
   return openMP;
 }
 
+void OpenMP_PLouffe(int iteration,result &R){
+
+  double Plouffe = 0.0;
+
+  float tS
+  auto clockBegin = std::chrono::system_clock::now();
+  #pragma omp parallel {
+
+
+    int p =0;
+    #pragma omp for reduction(+: Plouffe)
+    for (int i = 0; i < iteration; ++i)
+    {
+      Plouffe += (1.0 / pow(16.0, i)) * ((4.0 / ((8.0 * i) + 1.0)) - (2.0 / ((8.0 * i) + 4.0)) - (1.0 / ((8.0 * i) + 5.0)) - (1.0 / ((8.0 * i) + 6.0)));
+      p++;
+    }
+  }
+
+  tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
+  cout << "Plouffe  = " << Plouffe << endl;
+  cout << "Le calcul c'est fait en " << tS << " secondes." << endl;
+
+  R.Plouffe = Plouffe;
+  R.Tp = tS;
+
+}
 void OpenMP_Chebyshev(int iteration,result &R)
 {
 
