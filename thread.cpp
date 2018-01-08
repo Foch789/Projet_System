@@ -53,7 +53,7 @@ struct SChebyFormule
 //===========================================================================
 
 void FChebyshev(int iteration,float &tS,double &resultat);
-void FSimonPlouffe(int iteration float &tP, double &resultat);
+void FSimonPlouffe(int iteration,float &tP, double &resultat);
 void *FormulePlouffe(void *arg);
 void *SuiteUChebyshev(void *arg);
 void *SuiteVChebyshev(void *arg);
@@ -71,11 +71,13 @@ result ThreadCommun(int iteration)
   cout << "==============================================================="<< endl;
 
   double Cresultat=0;
+  double Presultat=0;
   float tT,tS,tP;
 
 
   FChebyshev(iteration,tS,Cresultat);
-  FPlouffe(iteration,tP,Presultat);
+  FSimonPlouffe(iteration,tP,Presultat);
+
   cout << "Chebyshev = " << Cresultat << endl;
   cout << "Le calcul de Chebyshev c'est fait en " << tS << " secondes." << endl;
   cout << "Simon Plouffe = " <<Presultat << endl;
@@ -88,7 +90,7 @@ result ThreadCommun(int iteration)
   thread.plouffe = Presultat;
   thread.chebyshev = Cresultat;
   thread.Tc = tS;
-  thread.Ts = tP;
+  thread.Tp = tP;
 
   return thread;
 
@@ -105,12 +107,14 @@ void FSimonPlouffe(int iteration, float &tS, double &resultat){
 
   pthread_t Tp1,Tp2;
 
-   auto clockBegin = std::chrono::system_clock::now();;
+
 
   p1.debutIteration = 0;
   p1.finalIteration = mpp->iteration/2 ;
   p2.debutIteration = p1.finalIteration;
   p2.finalIteration = mpp->iteration;
+
+  auto clockBegin = std::chrono::system_clock::now();
 
   pthread_create(&Tp1,NULL,FormulePlouffe,static_cast<void*>(&p1));
   pthread_create(&Tp2,NULL,FormulePlouffe,static_cast<void*>(&p2));
