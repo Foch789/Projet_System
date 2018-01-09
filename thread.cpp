@@ -9,15 +9,15 @@
 struct PLouffe
 {
     int iteration = 0;
-    double tP;
-    double resultat = 0.0;
+    long double tP;
+    long double resultat = 0.0;
 } typedef PLouffe;
 
 struct PlouffeThreads
 {
     int debutIteration = 0;
     int finalIteration = 0;
-    double resultat = 0;
+    long double resultat = 0;
 
 } typedef PlouffeThreads;
 
@@ -30,30 +30,30 @@ struct SCheby
 {
   int iteration;
   float tS;
-  double resultat;
+  long double resultat;
 }typedef SCheby;
 
 struct SChebySuite
 {
     int iteration;
-    double *suite;
+    long double *suite;
 }typedef SChebySuite;
 
 struct SChebyFormule
 {
   int iterationD;
   int iterationF;
-  double resultat;
-  double *U;
-  double *V;
+  long double resultat;
+  long double *U;
+  long double *V;
 }typedef SChebyFormule;
 
 //===========================================================================
 //===========================================================================
 //===========================================================================
 
-void FChebyshev(int iteration,float &tS,double &resultat);
-void FSimonPlouffe(int iteration,float &tP, double &resultat);
+void FChebyshev(int iteration,float &tS,long double &resultat);
+void FSimonPlouffe(int iteration,float &tP, long double &resultat);
 void *FormulePlouffe(void *arg);
 void *SuiteUChebyshev(void *arg);
 void *SuiteVChebyshev(void *arg);
@@ -70,13 +70,13 @@ result ThreadCommun(int iteration)
   cout << "==========================LES THREADS=========================="<< endl;
   cout << "==============================================================="<< endl;
 
-  double Cresultat=0;
-  double Presultat=0;
+  long double Cresultat=0;
+  long double Presultat=0;
   float tT,tS,tP;
 
   FSimonPlouffe(iteration,tP,Presultat);
-  cout << "Simon Plouffe = " <<Presultat << endl;
-  cout << "Le calcul Simon Plouffe c'est fait en " << tP << " secondes." << endl;
+  cout << "Plouffe = " << Presultat << endl;
+  cout << "Le calcul de Plouffe c'est fait en " << tP << " secondes." << endl;
 
   FChebyshev(iteration,tS,Cresultat);
   cout << "Chebyshev = " << Cresultat << endl;
@@ -101,20 +101,18 @@ result ThreadCommun(int iteration)
 //===========================================================================
 
 
-void FSimonPlouffe(int iteration, float &tP, double &resultat){
+void FSimonPlouffe(int iteration, float &tP, long double &resultat){
 
   PlouffeThreads p1,p2;
 
   pthread_t Tp1,Tp2;
-
-
 
   p1.debutIteration = 0;
   p1.finalIteration = static_cast<int>(iteration/2);
   p2.debutIteration = p1.finalIteration+1;
   p2.finalIteration = iteration;
 
-  auto clockBegin = std::chrono::system_clock::now();
+  auto clockBegin3 = std::chrono::system_clock::now();
   pthread_create(&Tp1,NULL,FormulePlouffe,static_cast<void*>(&p1));
   pthread_create(&Tp2,NULL,FormulePlouffe,static_cast<void*>(&p2));
 
@@ -123,7 +121,7 @@ void FSimonPlouffe(int iteration, float &tP, double &resultat){
 
 
   resultat = p1.resultat + p2.resultat;
-  tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
+  tP = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin3).count()/1000000000.0;
 
 
 
@@ -141,7 +139,7 @@ void *FormulePlouffe(void *arg)
 }
 
 
-void FChebyshev(int iteration,float &tS,double &resultat)
+void FChebyshev(int iteration,float &tS,long double &resultat)
 {
 
   SChebySuite U;
@@ -153,7 +151,7 @@ void FChebyshev(int iteration,float &tS,double &resultat)
 
   pthread_t TU,TV;
 
-  auto clockBegin = std::chrono::system_clock::now();
+  auto clockBegin2 = std::chrono::system_clock::now();
 
   resultat = 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * (99.0 / 100.0)) - (99.0 / 4780.0));
 
@@ -187,13 +185,13 @@ void FChebyshev(int iteration,float &tS,double &resultat)
 
     SChebyFormule C1;
     C1.iterationD = 2;
-    C1.iterationF = (int)(iteration)/2;
+    C1.iterationF = static_cast<int>(iteration/2);
     C1.resultat = 0;
     C1.U = U.suite;
     C1.V = V.suite;
 
     SChebyFormule C2;
-    C2.iterationD = ((int)(iteration)/2)+1;
+    C2.iterationD = C1.iterationF+1;
     C2.iterationF = iteration;
     C2.resultat = 0;
     C2.U = U.suite;
@@ -208,7 +206,7 @@ void FChebyshev(int iteration,float &tS,double &resultat)
 
   }
 
-  tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin).count()/1000000000.0;
+  tS = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - clockBegin2).count()/1000000000.0;
 
   delete [] U.suite;
   delete [] V.suite;

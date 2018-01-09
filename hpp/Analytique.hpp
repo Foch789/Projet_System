@@ -11,9 +11,9 @@ using namespace std;
 
 struct result
 {
-double plouffe;
+long double plouffe;
 float Tp;
-double chebyshev;
+long double chebyshev;
 float Tc;
 
 result& operator=(const result& src) { plouffe = src.plouffe; Tp = src.Tp; chebyshev = src.chebyshev; Tc = src.Tc; return *this;}
@@ -23,8 +23,8 @@ result SequentielCommun(int iteration);
 result ThreadCommun(int iteration);
 result OpenMP_Commun(int iteration);
 
-double *SuiteU(int iteration);
-double *SuiteV(int iteration);
-double ChebyshevF(int iterationD,int iterationF,double *tabU,double *tabV);
+long double *SuiteU(int iteration);
+long double *SuiteV(int iteration);
+long double ChebyshevF(int iterationD,int iterationF,long double *tabU,long double *tabV);
 
-double PlouffeF(int iterationD,int iterationF);
+long double PlouffeF(int iterationD,int iterationF);

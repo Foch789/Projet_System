@@ -20,7 +20,7 @@ result OpenMP_Commun(int iteration)
 void OpenMP_Plouffe(int iteration,result &R)
 {
 
-  double Plouffe = 0.0;
+  long double Plouffe = 0.0;
 
   float tS;
 
@@ -46,11 +46,11 @@ void OpenMP_Plouffe(int iteration,result &R)
 void OpenMP_Chebyshev(int iteration,result &R)
 {
 
-  double Chebyshev = 0.0;
-  double *suiteU = new double [iteration];
-  double *suiteV = new double [iteration];
-  double  U1 = (99.0 / 100.0);
-  double  V1 = (99.0 / 4780.0);
+  long double Chebyshev = 0.0;
+  long double *suiteU = new long double [iteration];
+  long double *suiteV = new long double [iteration];
+  long double  U1 = (99.0 / 100.0);
+  long double  V1 = (99.0 / 4780.0);
   Chebyshev += 8.0 * (pow(-1.0, 0) / (pow(10.0, 1.0)) * (1.0)) * ((4 * U1) - V1);
 
   float tP;

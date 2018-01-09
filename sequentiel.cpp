@@ -13,13 +13,13 @@ result SequentielCommun(int iteration)
   float tT;
 
   // Variable Plouffe
-  double Plouffe = 0.0;
+  long double Plouffe = 0.0;
 
   // Variable Chebyshev
-  double Chebyshev = 0.0;
-  double *U ,*V;
-  double U1 = (99.0 / 100.0);
-  double V1 = (99.0 / 4780.0);
+  long double Chebyshev = 0.0;
+  long double *U ,*V;
+  long double U1 = (99.0 / 100.0);
+  long double V1 = (99.0 / 4780.0);
 
 
     // CAlCUL DE PLOUFFE

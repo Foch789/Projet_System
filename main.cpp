@@ -1,6 +1,7 @@
 #include "hpp/Analytique.hpp"
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 int main()
 {
@@ -15,8 +16,8 @@ int main()
 
   int iteration = 0;
 
-  cout.precision(std::numeric_limits<double>::digits10 + 1);
-
+  cout.precision(std::numeric_limits<long double>::digits10 + 1);
+  cout << std::setprecision(std::numeric_limits<long double>::max_digits10);
 
   cout << "Combien d'iterations voulez-vous ? > ";
   cin >> iteration;
@@ -31,9 +32,10 @@ int main()
     openMP = OpenMP_Commun(iteration);
 
     stringstream ss;
-    ss.precision(std::numeric_limits<double>::digits10 + 1);
-    double valeurP = sequentiel.plouffe;
-    double valeurC = sequentiel.chebyshev;
+    ss.precision(std::numeric_limits<long double>::digits10 + 1);
+    ss << std::setprecision(std::numeric_limits<long double>::max_digits10);
+    long double valeurP = sequentiel.plouffe;
+    long double valeurC = sequentiel.chebyshev;
     ss << sequentiel.plouffe;
     string plouffestring = ss.str();
     ss.str("");
@@ -83,7 +85,7 @@ int main()
 
   //   if(ecrireFichier.is_open())
   //   {
-  //     ecrireFichier.precision(std::numeric_limits<double>::digits10 + 1);
+  //     ecrireFichier.precision(std::numeric_limits<long double>::digits10 + 1);
   //     ecrireFichier << std::showpoint;
   //     ecrireFichier << std::fixed;
   //     ecrireFichier << "============================================================================================================\n";

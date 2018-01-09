@@ -1,9 +1,9 @@
 #include "hpp/Analytique.hpp"
 
-double PlouffeF(int iterationD,int iterationF)
+long double PlouffeF(int iterationD,int iterationF)
 {
 
-  double resultat =0.0;
+  long double resultat =0.0;
 
   for (int i = iterationD; i < iterationF; ++i)
   {
